@@ -7,19 +7,13 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.Region;
-import android.graphics.Xfermode;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.util.AttributeSet;
-import android.util.Log;
-import android.view.View;
 import android.support.annotation.Nullable;
+import android.util.AttributeSet;
+import android.view.View;
 
 /**
  * author 刘鉴钊
@@ -55,10 +49,6 @@ public class ScanView extends View {
 
     private int middleRadius;
 
-    /**
-     * 内圆半径
-     */
-    private int interRadius;
     private PorterDuffXfermode porterDuffXfermode;
 
     private Bitmap xfermod_dstBitmap;
@@ -97,7 +87,6 @@ public class ScanView extends View {
         typedArray.recycle();
         init(srcBitmap);
 
-
     }
 
     private void init(Bitmap bitmap) {
@@ -114,7 +103,6 @@ public class ScanView extends View {
 
         middleRadius = outerRadius - 10;
 
-        interRadius = middleRadius - 10;
 
         //删除交集，保留目标图模式
         porterDuffXfermode = new PorterDuffXfermode(PorterDuff.Mode.DST_OUT);
@@ -140,6 +128,13 @@ public class ScanView extends View {
         mPaint.setXfermode(porterDuffXfermode);
           //绘制Src圆
         canvas.drawBitmap(xfermod_srcBitmap, 0, 0, mPaint);
+
+        //==========直接绘制圆并不能实现删除交集，保留目标图=================
+//        canvas.drawCircle(centerX, centerY, middleRadius, mPaint);
+//        mPaint.setXfermode(porterDuffXfermode);
+//        mPaint.setColor(Color.parseColor("#33000000"));
+//        canvas.drawCircle(centerX, centerY, outerRadius, mPaint);
+        //==========直接绘制圆并不能实现图形取反=================
         //绘制完成需要置null
         mPaint.setXfermode(null);
         //缓冲完毕复原
